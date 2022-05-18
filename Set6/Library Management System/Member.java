@@ -5,7 +5,7 @@ public class Member{
     int memberId;
     String name;
     String password;
-    int maximumCheckOutLimit = 5;
+    int checkOutCount = 0;
 
     static Scanner sc = new Scanner(System.in);
     static ArrayList<Member> memberList = new ArrayList<Member>();
@@ -25,9 +25,9 @@ public class Member{
         for(Member m : memberList){
             System.out.println("Member ID: " + m.memberId);
             System.out.println("Member Name: " + m.name);
-            System.out.println("Maximum Checkout Limit: " + m.maximumCheckOutLimit);
+            System.out.println("Maximum Checkout Limit: " + m.checkOutCount);
+            System.out.println("--------------------------\n");
         }
-        System.out.println("--------------------------\n");
     }
 
     public static void signupMember(){
@@ -41,13 +41,18 @@ public class Member{
         Member memberobj = new Member(name, password);
         memberList.add(memberobj);
 
-        // listMembers();
+        System.out.println("\n");
+        System.out.println("Member Details"); 
+        System.out.println("--------------------------");
+        System.out.println("Member ID: " + memberobj.memberId);
+        System.out.println("Member Name: " + memberobj.name);
+        System.out.println("Maximum Checkout Limit: " + memberobj.checkOutCount);
+        System.out.println("--------------------------\n");
 
         System.out.println("Member Signup Successful");
     }
 
     public static void loginMember(){
-        
         boolean memberFlag = false;
         int memberId;
         String password;
@@ -61,7 +66,8 @@ public class Member{
                 password = sc.next();
 
                 if(m.password.equals(password)){
-                    System.out.println("Member Login Successful");
+                    System.out.println("\nMember Login Successful");
+                    Main.loggedMember = memberId;
                     Main.listMemberChoices();
 
                 }
@@ -72,6 +78,7 @@ public class Member{
         }
 
         if(!(memberFlag)){
+            memberId = 0;
             System.out.println("Member Not Found, Please Check your Member ID");
         }
 
