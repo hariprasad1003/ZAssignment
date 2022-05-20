@@ -6,7 +6,7 @@ public class Member{
     String name;
     String password;
     int checkOutCount = 0;
-
+    int fine = 0;
     static Scanner sc = new Scanner(System.in);
     static ArrayList<Member> memberList = new ArrayList<Member>();
     
