@@ -7,9 +7,23 @@
 <meta charset="UTF-8">
 <title>Library Management System</title>
 </head>
+
+<script type="text/javascript">
+
+function display_message(message, success_status){
+	alert(message);
+	if(success_status == 1){
+		window.location.href="/Library_Management_System/menus.html";	
+	}else{
+		window.location.href="/Library_Management_System/index.html";
+	}
+	
+}
+
+</script>
+
 <body>
-	<%
-		
+	<%		
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 		
@@ -23,17 +37,41 @@
 			try{
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				con=DriverManager.getConnection("jdbc:mysql://localhost:3306/Library","root","rootuser");
-				pst=con.prepareStatement("select * from member where Name='"+name+"' and Password='"+password+"' limit 1");
+				pst=con.prepareStatement("select * from member where Name='"+name+"' limit 1");
 				result=pst.executeQuery();
 				if(result.next()){
-					out.println("Login Successful");
-				   	session.setAttribute("currentMember", result.getString("MemberID"));
-					response.sendRedirect("menus.jsp");
+					if(password.equals(result.getString("Password"))){
+						session.setAttribute("currentMember", result.getString("MemberID"));
+						%>
+						
+						<script type="text/javascript"> 
+							window.onload = function(){
+								display_message("Login Successful", 1); 
+							}
+						</script>							
+						<%
+					}
+					else{
+						%>
+							
+						<script type="text/javascript"> 
+							window.onload = function(){
+								display_message("Invalid Name or Password", 0); 
+							}
+						</script>
+						
+						<%
 					
-					// System.out.println(session.getAttribute("currentMember"));
+					}
 				}
 				else{
-					out.println("Invalid Username or Password");	
+					%>
+					<script type="text/javascript"> 
+						window.onload = function(){
+							display_message("User not found, Please Signup", 0); 
+						}
+					</script>
+					<%
 				}
 			}
 			catch(ClassNotFoundException e){

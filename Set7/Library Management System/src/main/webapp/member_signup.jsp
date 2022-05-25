@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8"%>
 <%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html>
@@ -7,29 +8,53 @@
 <meta charset="UTF-8">
 <title>Library Management System</title>
 </head>
+
+<script type="text/javascript">
+
+function display_message(message){
+	alert(message);
+	window.location.href="/Library_Management_System/index.html";	
+}
+
+</script>
+
 <body>
 	<%
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
-		System.out.println("Name: "  + name);
-		System.out.println("Password: " + password);
+		
+		// System.out.println("Name: "  + name);
+		// System.out.println("Password: " + password);
 		
 		try{
 			Connection con=null;
 			PreparedStatement pst=null;
-			int result;
+			int result_status;
+			ResultSet result=null;
+			
 			try{
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				con=DriverManager.getConnection("jdbc:mysql://localhost:3306/Library","root","rootuser");
-				pst=con.prepareStatement("insert into member (Name, Password) Values ('"+name+"', '"+password+"')");
-				result=pst.executeUpdate();
-				// System.out.println(result);
-				if(result == 1){
-					out.println("Signin Successful");
-					response.sendRedirect("index.html");					
+				pst=con.prepareStatement("insert ignore into member (Name, Password) Values ('"+name+"', '"+password+"')");
+				result_status=pst.executeUpdate();
+				if(result_status == 1){
+				%>
+					<script type="text/javascript"> 
+						window.onload = function(){
+							display_message("Signup Successful"); 
+						}
+					</script>
+				<%					
 				}
 				else{
-					out.println("Error Occurred");
+				%>
+					<script type="text/javascript"> 
+						window.onload = function(){
+							display_message("Error Occurred"); 
+						}
+					</script>
+	
+				<%
 				}
 
 			}
